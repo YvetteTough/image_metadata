@@ -100,7 +100,6 @@ class GUI:
         extension_label = Label(window, text='Enter the image extension')
         extension_label.pack()
         self.extension_field = StringVar()
-        self.extension_field.set("Please select an option") #Sets the default.
         OptionMenu(window, self.extension_field, ".jpg", ".jpeg", ".png", ".gif", ".tiff").pack()
 
         title_label = Label(window, text='Enter the image title:')
@@ -117,14 +116,12 @@ class GUI:
         licence_label = Label(window, text='Enter the image licence')
         licence_label.pack()
         self.licence_field = StringVar()
-        self.licence_field.set("Please select an option") #Sets the default.
         OptionMenu(window, self.licence_field, "Commercial", "Non-Commercial", "Editing", "No Editing").pack()
 
         #code for pulldown window
         security_class_label = Label(window, text='Enter the image security class:')
         security_class_label.pack()
         self.security_class_field = StringVar()
-        self.security_class_field.set("Please select an option") #Sets the default.
         OptionMenu(window, self.security_class_field, "Public", "Private", "Family", "Other").pack()
 
 
