@@ -108,7 +108,6 @@ class GUI:
         #outside_margin = Label(window, bg="#ffe6e6", padx=10, pady=5).grid(row=3)
         extension_label = Label(window, text='Extension:', bg="#ffe6e6", font=("Georgia","13")).grid(row=3, column=4, sticky=E)
         self.extension_field = StringVar()
-        self.extension_field.set("Select an Option")
         OptionMenu(window, self.extension_field, ".jpg", ".jpeg", ".png", ".gif", ".tiff").grid(row=3, column=5)
 
 
@@ -134,14 +133,12 @@ class GUI:
         #outside_margin = Label(window, bg="#ffe6e6", padx=10, pady=5).grid(row=7)
         licence_label = Label(window, text='Licence:', bg="#ffe6e6", font=("Georgia","13")).grid(row=5, column=4, sticky=E)
         self.licence_field = StringVar()
-        self.licence_field.set("Select an Option")
         OptionMenu(window, self.licence_field, "Attribution", "Attribution-ShareAlike", "Attribution-NoDerivs", "Attribution-NonCommercial", "Attribution-NonCommercial-ShareAlike", "Attribution-NonCommercial-NoDerivs").grid(row=5, column=5) #this code creates a drop down menu
 
 
         #outside_margin = Label(window, bg="#ffe6e6", padx=10, pady=5).grid(row=8)
         security_class_label = Label(window, text='Security Class:', bg="#ffe6e6", font=("Georgia","13")).grid(row=7, column=4, sticky=E)
         self.security_class_field = StringVar()
-        self.security_class_field.set("Select an Option")
         OptionMenu(window, self.security_class_field, "Private", "Public", "Family", "Other").grid(row=7, column=5)
 
 
