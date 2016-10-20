@@ -3,7 +3,7 @@
 # Purpose:              This program is designed to collect the meta data information for an image ie its imageID, filename, extension, title, owner, liccence and security class. Then write a CSV with the information.
 #
 # Version History:      V1: Asks for Image metadata, writes csv, GUI, validation
-#                       V2: Insert of drop down menus, default in the drop down menu
+#                       V2: Insert of drop down menus
 #
 # Author:               Yvette Tough
 #
