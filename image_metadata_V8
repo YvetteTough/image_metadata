@@ -1,0 +1,316 @@
+#-------------------------------------------------------------------------------
+# Name:                 Program for collecting image meta data
+# Purpose:              This program is designed to collect the meta data information for an image ie its imageID, filename, extension, title, owner, liccence and security class. Then write a CSV with the information.
+#
+# Version History:      V1: Asks for Image metadata, writes csv, GUI, validation
+#                       V2: Insert of drop down menus
+#                       V3  Inserted the help buton
+#                       V4: seperation of the owners first and last name, GUI geometry set up from pack to grid, design
+#                       V5: Fixed bug with submit button saying file had been submitted even after user is advised they must validate data first, then data would not be submitted even though even had been told it had.
+#                       V6: Bug fixed so no fields can be left blank including drops down menu, owner first and last name cannot be longer than 30 characters
+#                       V7: Validation for image ID - must be an int and cannot be any duplicate image ID, owners first and last name cannot include integars, fields cannot be filled with just a space
+#                       V8: code for writting csv and making sure code has been validated before being WRITTEN to the csv file.
+#
+# Author:               Yvette Tough
+#
+# Created:              12/10/2016
+# Copyright:            (c) Yvette Tough 2016
+# Licence:              CC
+#-------------------------------------------------------------------------------
+#!/usr/bin/env python
+
+def main():
+    pass
+
+if __name__ == '__main__':
+    main()
+
+
+#imports GUI libraryand message box
+from tkinter import *
+import tkinter.messagebox
+
+
+class Image:
+    def __init__(self, image_ID, filename, extension, title, owner_fn, owner_ln, licence, security_class):
+        self.image_ID = image_ID
+        self.filename = filename
+        self.extension = extension
+        self.title = title
+        self.owner_fn = owner_fn
+        self.owner_ln = owner_ln
+        self.licence = licence
+        self.security_class = security_class
+
+    def get_image_ID(self):
+        return self.image_ID
+
+    def get_filename(self):
+        return self.filename
+
+    def get_extension(self):
+        return self.extension
+
+    def get_title(self):
+        return self.title
+
+    def get_owner_fn(self):
+        return self.owner_fn
+
+    def get_owner_ln(self):
+        return self.owner_ln
+
+    def get_licence(self):
+        return self.licence
+
+    def get_security_class(self):
+        return self.security_class
+
+
+
+
+
+#creating the GUI interface
+class GUI:
+    def __init__(self):
+
+        #creates the GUI window
+        window = Tk()
+        window.title("Image Metadata Entry")
+        #setting root window and size
+        window.minsize(width=600, height=400)
+        window.configure(background='#ffe6e6')
+
+
+        heading_label = Label(window, bg="#ffe6e6", text="Image Metadata", font=("Georgia","24", "bold")).grid(row=0, columnspan=7)
+        outside_margin = Label(window, width=1, padx=2, bg="#ffe6e6").grid(row=1)
+
+
+        #INITIALIZATION VARIABLES
+        space = Label(window, bg="#ffe6e6", width=3).grid(row=2, column=0) #design for spacing
+        #this variable stores whether the data has been validated or not
+        self.ready_to_write = False
+
+        #this will contain the list of all schools entered via the gui
+        self.imagelist = []
+
+
+
+        #creating label and field variable in GUI for each entry field
+        outside_margin = Label(window, bg="#ffe6e6").grid(row=2) # used for margins
+        image_ID_label = Label(window, text='Image ID:', bg="#ffe6e6", font=("Georgia","13")).grid(row=2, column=1, sticky=E)
+        self.image_ID_field = Entry(window, width=20)
+        self.image_ID_field.grid(row=2, column=2)
+
+
+        # design
+        space = Label(window, bg="#ffe6e6", width=3).grid(row=2, column=3)
+
+
+        filename_label = Label(window, text='Filename:', bg="#ffe6e6", font=("Georgia","13")).grid(row=2, column=4, sticky=E)
+        self.filename_field = Entry(window, width=20)
+        self.filename_field.grid(row=2, column=5)
+
+
+
+        extension_label = Label(window, text='Extension:', bg="#ffe6e6", font=("Georgia","13")).grid(row=3, column=4, sticky=E)
+        self.extension_field = StringVar()
+        self.extension_field.set("")
+        OptionMenu(window, self.extension_field, ".jpg", ".jpeg", ".png", ".gif", ".tiff").grid(row=3, column=5)
+
+
+
+        title_label = Label(window, text='Title:', bg="#ffe6e6", font=("Georgia","13")).grid(row=3, column=1, sticky=E)
+        self.title_field = Entry(window, width=20)
+        self.title_field.grid(row=3, column=2)
+
+
+
+        owner_fn_label = Label(window, text='Owners Firstname:', bg="#ffe6e6", font=("Georgia","13")).grid(row=5, column=1, sticky=E)
+        self.owner_fn_field = Entry(window, width=20)
+        self.owner_fn_field.grid(row=5, column=2)
+
+
+
+        owner_ln_label = Label(window, text='Owners Lastname:', bg="#ffe6e6", font=("Georgia","13")).grid(row=7, column=1, sticky=E)
+        self.owner_ln_field = Entry(window, width=20)
+        self.owner_ln_field.grid(row=7, column=2)
+
+
+
+        licence_label = Label(window, text='Licence:', bg="#ffe6e6", font=("Georgia","13")).grid(row=5, column=4, sticky=E)
+        self.licence_field = StringVar()
+        self.licence_field.set("")
+        OptionMenu(window, self.licence_field, "Attribution", "Attribution-ShareAlike", "Attribution-NoDerivs", "Attribution-NonCommercial", "Attribution-NonCommercial-ShareAlike", "Attribution-NonCommercial-NoDerivs").grid(row=5, column=5) #this code creates a drop down menu
+
+
+
+        security_class_label = Label(window, text='Security Class:', bg="#ffe6e6", font=("Georgia","13")).grid(row=7, column=4, sticky=E)
+        self.security_class_field = StringVar()
+        self.security_class_field.set("")
+        OptionMenu(window, self.security_class_field, "Private", "Public", "Family", "Other").grid(row=7, column=5)
+
+
+        #design
+        space = Label(window, bg="#ffe6e6", width=1).grid(row=2, column=6)
+
+
+
+        #creates a button. The command function is run when the button is pressed
+        outside_margin = Label(window, bg="#ffe6e6", padx=1, pady=1).grid(row=8)
+        validate_button = Button(window, text='Press to Validate', command=self.no_duplicates, bg="#ffccff", width=50)
+        validate_button.grid(row=9, columnspan=6)
+
+
+        outside_margin = Label(window, bg="#ffe6e6", padx=1, pady=1).grid(row=10)
+        csv_button = Button(window, text='Record to CSV', command=self.writetocsv, bg="#ffccff", width=50)
+        csv_button.grid(row=11, columnspan=6)
+
+        outside_margin = Label(window, bg="#ffe6e6", padx=1, pady=1).grid(row=12)
+        button_help = Button(window, text="?", command=self.doHelp, bg="#ccccff",borderwidth=2, width=50, font=('Cambria', '11', 'bold')) #Run the doHelp function
+        button_help.grid(row=13, columnspan=6)
+
+
+        #waiting for user input - event driven program
+        window.mainloop()
+
+
+    def doHelp(self): #This function will only be called if the user presses the help button.
+        tkinter.messagebox.showinfo('Help','Tips: \n- The image ID must be an number (no decimals) and it must be unique (no duplicates). \n- Please validate the records after each image metadata has been entered. \n- Once you are finished adding records, click "Write to CSV". This will write the entered records to a text file. \n \n Licence Type: \n- Attribution: This license lets others distribute, remix, tweak, and build upon your work, even commercially, as long as they credit you for the original creation. \n\n- Attribution-ShareAlike: This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. \n\n- Attribution-NoDerivs: This license allows for redistribution, commercial and non-commercial, as long as it is passed along unchanged and in whole, with credit to you. \n\n- Attribution-NonCommercial: This license lets others remix, tweak, and build upon your work non-commercially, and although their new works must also acknowledge you and be non-commercial, they dont have to license their derivative works on the same terms. \n\n- Attribution-NonCommercial-ShareAlike: This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms. \n\n- Attribution-NonCommercial-NoDerivs: This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.\n \n Licence type info from: https://creativecommons.org/licenses/ retrieved on October 24th 2016.')
+
+
+
+    def no_duplicates(self):
+        noduplicate = True;
+        for image in self.imagelist:
+            if self.image_ID_field.get() == image.get_image_ID(): #If image ID has already been entered, then the warning message will show.
+                noduplicate= False
+                print('Please enter a unique Image ID');
+                tkinter.messagebox.showwarning('Warning!','Duplicate Image ID. Please enter a unique integer.');
+
+
+        if noduplicate == True:
+            self.validate()
+
+
+
+
+    def validate(self):
+        #validation
+        if self.empty_fields() == True and self.field_space() == True and self.id_int() == True and self.owner_fn_ln_greater_30() == True and self.owner_fn_int() == True and self.owner_ln_int() == True:
+            self.doSubmit()
+
+
+
+
+
+
+
+    def empty_fields(self):
+        if len(self.image_ID_field.get()) <1 or len(self.filename_field.get()) <1 or len(self.extension_field.get()) <1 or len(self.title_field.get()) <1 or len(self.owner_fn_field.get()) <1 or len(self.owner_ln_field.get()) <1 or len(self.licence_field.get()) <1 or len(self.security_class_field.get()) <1 :
+            print('Please enter a value for all fields.')
+            tkinter.messagebox.showinfo('Warning!', 'Please enter a value for all fields.')
+            return False
+        else:
+            return True
+
+
+
+    def field_space(self):
+        if self.image_ID_field.get().isspace() or self.filename_field.get().isspace() or self.extension_field.get().isspace() or self.title_field.get().isspace() or self.owner_fn_field.get().isspace() or self.owner_ln_field.get().isspace() or self.licence_field.get().isspace() or self.security_class_field.get().isspace():
+            print('Please enter a value for all fields (this means no spaces).')
+            tkinter.messagebox.showinfo('Warning!', 'Please enter a value for all fields (this means no spaces).')
+            return False
+        else:
+            return True
+
+
+
+    def id_int(self):
+        if self.image_ID_field.get().isdigit():
+            return True
+        elif not self.image_ID_field.get().isdigit():
+            print('Image ID must only consist of numbers.')
+            tkinter.messagebox.showinfo('Warning!', 'Image ID must only consist of numbers.')
+            return False
+
+
+
+    def owner_fn_ln_greater_30(self):
+        if len(self.owner_fn_field.get()) > 30 or len(self.owner_ln_field.get()) >30:
+            print('Owners First and Last Names must not exceed 30 characters each.')
+            tkinter.messagebox.showinfo('Warning!', 'Owners First and Last Names must not exceed 30 characters each.')
+            return False
+        else:
+            return True
+
+
+
+    def owner_fn_int (self):
+        FN = self.owner_fn_field.get();
+        integers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        if FN in integers or '0' in FN or '1' in FN or '2' in FN or '3' in FN or '4' in FN or '5' in FN or '6' in FN or '7' in FN or '8' in FN or '9' in FN:
+            print('Owners firstname must not include any numbers.')
+            tkinter.messagebox.showinfo('Warning!', 'Owners firstname must not include a number.')
+            return False
+        else:
+            return True
+
+
+
+    def owner_ln_int (self):
+        LN = self.owner_ln_field.get();
+        integers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        if LN in integers or '0' in LN or '1' in LN or '2' in LN or '3' in LN or '4' in LN or '5' in LN or '6' in LN or '7' in LN or '8' in LN or '9' in LN:
+            print('Owners lastname must not include any numbers.')
+            tkinter.messagebox.showinfo('Warning!', 'Owners lastname must not include a number.')
+            return False
+        else:
+            return True
+
+
+
+
+
+    def doSubmit(self):
+        self.imagelist.append(Image(self.image_ID_field.get(), self.filename_field.get(), self.extension_field.get(), self.title_field.get(), self.owner_fn_field.get(), self.owner_ln_field.get(), self.licence_field.get(), self.security_class_field.get()))
+        self.ready_to_write= True
+        tkinter.messagebox.showinfo('Success','Submission Sucessful')
+
+        #resets all fields after last input has been accepted
+        self.image_ID_field.delete(0, END)
+        self.filename_field.delete(0, END)
+        self.extension_field.set("")
+        self.title_field.delete(0, END)
+        self.owner_fn_field.delete(0, END)
+        self.owner_ln_field.delete(0, END)
+        self.licence_field.set("")
+        self.security_class_field.set("")
+
+
+
+
+
+    def writetocsv(self):
+        import csv
+        csv_name = 'image_metadata_database.csv'
+
+        if self.ready_to_write == True: #cheacks data has been previously validated
+            ofile = open(csv_name, 'w') #open with write('w') privelages so csv is re-written each time the gui is opened (no avoid duplicate imageID)
+            writer = csv.writer(ofile, delimiter=',')
+            #adds input from gui to csv file
+            for image in self.imagelist:
+                print(image.get_image_ID())
+                writer.writerow([image.get_image_ID(),image.get_filename(), image.get_extension(), image.get_title(), image.get_owner_fn(), image.get_owner_ln(), image.get_licence(), image.get_security_class()])
+            #explicitly closes the output file
+            ofile.close()
+            tkinter.messagebox.showinfo('Success!',csv_name+' has been generated successfully.')
+
+        elif self.ready_to_write == False:
+            tkinter.messagebox.showwarning('Error!', 'You need to Validate your data')
+
+        self.ready_to_write = False
+
+
+#initialises the programme
+GUI()
